@@ -6,7 +6,7 @@ import {
   refresh,
   register,
 } from '../controller/auth.controller.js';
-import { Authenicate } from '../middleware/auth.middleware.js';
+import { Authenticate } from '../middleware/auth.middleware.js';
 import {
   loginValidetor,
   registerValidetor,
@@ -15,6 +15,6 @@ const router = express.Router();
 router.post('/register', registerValidetor, register);
 router.post('/login', loginValidetor, login);
 router.post('/refresh', refresh);
-router.get('/me', Authenicate, getProfile);
-router.post('/logout', Authenicate, logout);
+router.get('/me', Authenticate, getProfile);
+router.post('/logout', Authenticate, logout);
 export default router;

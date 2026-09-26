@@ -1,7 +1,7 @@
 import userRegisterModel from '../model/auth.model.js';
 import { readAccessToken } from '../utils/auth.utils.js';
 
-export const Authenicate = async (req, res, next) => {
+export const Authenticate = async (req, res, next) => {
   const accessToken = req.headers.authorization?.split(' ')[1];
   if (!accessToken) {
     return res.status(400).json({
