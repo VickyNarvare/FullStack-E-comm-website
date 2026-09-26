@@ -1,5 +1,4 @@
 import express from 'express';
-import { Authenicate } from '../../middleware/auth.middleware.js';
 import {
   getProfile,
   login,
@@ -7,6 +6,7 @@ import {
   refresh,
   register,
 } from '../controller/auth.controller.js';
+import { Authenicate } from '../middleware/auth.middleware.js';
 import {
   loginValidetor,
   registerValidetor,

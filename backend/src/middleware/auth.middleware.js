@@ -1,5 +1,5 @@
-import { readAccessToken } from '../src/utils/auth.utils.js';
-import userRegisterModel from '../src/model/auth.model.js';
+import userRegisterModel from '../model/auth.model.js';
+import { readAccessToken } from '../utils/auth.utils.js';
 
 export const Authenicate = async (req, res, next) => {
   const accessToken = req.headers.authorization?.split(' ')[1];
@@ -22,7 +22,9 @@ export const Authenicate = async (req, res, next) => {
 
   const user = await userRegisterModel.findById(verifiedAccessToken.userId);
   if (!user?.refreshToken) {
-    return res.status(401).json({ message: 'Session ended. Please log in again.' });
+    return res
+      .status(401)
+      .json({ message: 'Session ended. Please log in again.' });
   }
 
   req.user = verifiedAccessToken;
