@@ -1,0 +1,50 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink: #101217;
+  --color-ink-soft: #171a21;
+  --color-ink-line: #262b36;
+  --color-mist: #e7e9ee;
+  --color-mist-dim: #a2a8b5;
+  --color-gold: #d6a447;
+  --color-gold-soft: #e8bc63;
+  --color-teal: #5bc3b0;
+  --font-body: 'Segoe UI', ui-sans-serif, sans-serif;
+  --font-display: 'Segoe UI', ui-sans-serif, sans-serif;
+  --radius-card: 0.5rem;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-mist);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-color: var(--color-gold);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink-line);
+  border-radius: 999px;
+}
