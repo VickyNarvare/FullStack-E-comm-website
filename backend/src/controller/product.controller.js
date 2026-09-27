@@ -12,15 +12,15 @@ export const createProduct = async (req, res) => {
         .json({ message: 'At least one image is required.' });
     }
 
-    const photoURL = [];
-
-    for (const file of uploadedFiles) {
-      const response = await uploadFiles({
-        buffer: file.buffer,
-        fileName: file.originalname,
-      });
-      photoURL.push(response.url);
-    }
+    const photoURL = await Promise.all(
+      uploadedFiles.map(async (file) => {
+        const response = await uploadFiles({
+          buffer: file.buffer,
+          fileName: file.originalname,
+        });
+        return response.url;
+      })
+    );
 
     const parsedPrice =
       typeof req.body.price === 'string'
@@ -74,6 +74,21 @@ export const deleteProduct = async (req, res) => {
   } catch (error) {
     return res.status(400).json({
       message: 'Invalid product id.',
+      error: error.message,
+    });
+  }
+};
+
+export const getAllProduct = async (req, res) => {
+  try {
+    const allproducts = await productModel.find();
+    return res.status(200).json({
+      message: 'all product fatched successfully.',
+      product: { allproducts },
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: 'Invalid request.',
       error: error.message,
     });
   }

@@ -3,7 +3,9 @@ import { upload } from '../config/multer.config.js';
 import {
   createProduct,
   deleteProduct,
+  getAllProduct,
 } from '../controller/product.controller.js';
+import { Authenticate } from '../middleware/auth.middleware.js';
 import {
   paramVelidator,
   productValidator,
@@ -26,15 +28,13 @@ const parsePrice = (req, res, next) => {
 
 router.post(
   '/create',
-  upload.fields([
-    { name: 'productFiles', maxCount: 5 },
-    { name: 'images', maxCount: 5 },
-    { name: 'files', maxCount: 5 },
-  ]),
+  Authenticate,
+  upload.fields([{ name: 'files', maxCount: 5 }]),
   parsePrice,
   productValidator,
   createProduct
 );
-router.post('/delete/:id', paramVelidator, deleteProduct);
+router.post('/delete/:id', Authenticate, paramVelidator, deleteProduct);
+router.get('/', getAllProduct);
 
 export default router;
