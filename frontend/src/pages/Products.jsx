@@ -1,4 +1,4 @@
-import { Plus, Search } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import api from '../api/axios';
@@ -68,19 +68,6 @@ export default function Products() {
 
       <div className="p-5 sm:p-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <div className="relative w-full sm:w-72">
-            <Search
-              size={16}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-mist-dim"
-            />
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search your products"
-              className="w-full bg-ink-soft border border-ink-line rounded-card pl-9 pr-3 py-2.5 text-sm focus-ring"
-            />
-          </div>
-
           <button
             onClick={() => setAddOpen(true)}
             className="flex items-center justify-center gap-2 bg-gold text-ink font-semibold rounded-card px-4 py-2.5 text-sm hover:bg-gold-soft transition-colors"
@@ -112,7 +99,7 @@ export default function Products() {
               )}
             </div>
           ) : (
-            <table className="w-full min-w-[560px]">
+            <table className="w-full min-w-140">
               <thead>
                 <tr className="text-left text-xs text-mist-dim border-b border-ink-line">
                   <th className="py-3 pr-4 font-medium">Product</th>

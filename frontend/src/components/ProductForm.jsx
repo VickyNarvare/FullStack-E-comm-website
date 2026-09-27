@@ -121,7 +121,11 @@ export default function ProductForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(submit)} className="space-y-4" noValidate>
+    <form
+      onSubmit={handleSubmit(submit)}
+      className="space-y-4 mx-auto"
+      noValidate
+    >
       <div>
         <label className="block text-sm mb-1.5 text-mist-dim">
           Product name
@@ -231,7 +235,7 @@ export default function ProductForm({
           <label className="block text-sm mb-1.5 text-mist-dim">Price</label>
           <div className="flex gap-2">
             <select
-              className="w-[4.5rem] shrink-0 bg-ink border border-ink-line rounded-card px-2 py-2.5 text-sm focus-ring"
+              className="w-18 shrink-0 bg-ink border border-ink-line rounded-card px-2 py-2.5 text-sm focus-ring"
               {...register('price.currency', { required: true })}
             >
               {CURRENCIES.map((c) => (
