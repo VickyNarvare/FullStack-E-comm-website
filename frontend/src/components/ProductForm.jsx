@@ -1,5 +1,5 @@
 import { UploadCloud, X } from 'lucide-react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
@@ -21,10 +21,12 @@ export default function ProductForm({
   onSubmit,
   submitting,
   submitLabel = 'Save product',
+  initialValues,
 }) {
   const {
     register,
     handleSubmit,
+    reset,
     setValue,
     formState: { errors },
   } = useForm({
@@ -41,9 +43,26 @@ export default function ProductForm({
     },
   });
 
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState(initialValues?.images || []);
   const [files, setFiles] = useState([]);
   const [dragActive, setDragActive] = useState(false);
+
+  useEffect(() => {
+    const values = {
+      title: initialValues?.title || '',
+      description: initialValues?.description || '',
+      stock: initialValues?.stock ?? '',
+      category: initialValues?.category || CATEGORIES[0],
+      price: {
+        amount: initialValues?.price?.amount ?? '',
+        currency: initialValues?.price?.currency || 'INR',
+      },
+      images: initialValues?.images || [],
+    };
+    reset(values);
+    setImages(values.images);
+    setFiles([]);
+  }, [initialValues, reset]);
 
   // manually-controlled field: images are drag/drop + preview, so we register
   // them for validation only (max 5, at least 1) rather than via a plain input
@@ -116,6 +135,10 @@ export default function ProductForm({
     formData.append('category', data.category);
     formData.append('stock', String(data.stock));
     formData.append('price', JSON.stringify(data.price));
+    formData.append(
+      'existingImages',
+      JSON.stringify(images.filter((image) => !image.startsWith('data:')))
+    );
     files.forEach((file) => formData.append('files', file));
     return onSubmit(formData);
   };

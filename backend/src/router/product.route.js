@@ -4,6 +4,7 @@ import {
   createProduct,
   deleteProduct,
   getAllProduct,
+  updateProduct,
 } from '../controller/product.controller.js';
 import { Authenticate } from '../middleware/auth.middleware.js';
 import {
@@ -35,6 +36,15 @@ router.post(
   createProduct
 );
 router.post('/delete/:id', Authenticate, paramVelidator, deleteProduct);
+router.patch(
+  '/update/:id',
+  Authenticate,
+  upload.fields([{ name: 'files', maxCount: 5 }]),
+  parsePrice,
+  paramVelidator,
+  productValidator,
+  updateProduct
+);
 router.get('/', getAllProduct);
 
 export default router;

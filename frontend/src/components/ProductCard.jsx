@@ -1,8 +1,8 @@
-import { ImageOff, Trash2 } from 'lucide-react';
+import { ImageOff, Pencil, Trash2 } from 'lucide-react';
 
 const SYMBOLS = { INR: '₹', USD: '$' };
 
-export default function ProductCard({ product, onDelete }) {
+export default function ProductCard({ product, onDelete, onEdit }) {
   const lowStock = product.stock <= 5;
   const thumbnail = product.images?.[0] || product.imageUrl;
   const symbol = SYMBOLS[product.price?.currency] || '₹';
@@ -49,6 +49,13 @@ export default function ProductCard({ product, onDelete }) {
       </td>
       <td className="py-3 pr-4">
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => onEdit(product)}
+            className="p-1.5 rounded-card text-mist-dim hover:text-gold hover:bg-gold/10 transition-colors"
+            title="Edit"
+          >
+            <Pencil size={15} />
+          </button>
           <button
             onClick={() => onDelete(product)}
             className="p-1.5 rounded-card text-mist-dim hover:text-red-400 hover:bg-red-400/10 transition-colors"

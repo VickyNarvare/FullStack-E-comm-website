@@ -12,6 +12,7 @@ export default function Products() {
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [addOpen, setAddOpen] = useState(false);
+  const [editing, setEditing] = useState(null);
   const [deleting, setDeleting] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -55,6 +56,21 @@ export default function Products() {
       toast.error(err?.response?.data?.message || 'Could not delete product.');
     } finally {
       setDeleting(null);
+    }
+  };
+
+  const handleUpdate = async (values) => {
+    const id = editing._id || editing.id;
+    setSubmitting(true);
+    try {
+      await api.patch(`/product/update/${id}`, values);
+      await fetchProducts();
+      toast.success('Product updated.');
+      setEditing(null);
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Could not update product.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -113,6 +129,7 @@ export default function Products() {
                   <ProductCard
                     key={p._id || p.id}
                     product={p}
+                    onEdit={setEditing}
                     onDelete={setDeleting}
                   />
                 ))}
@@ -132,6 +149,22 @@ export default function Products() {
           submitting={submitting}
           submitLabel="Add product"
         />
+      </Modal>
+
+      <Modal
+        open={!!editing}
+        onClose={() => setEditing(null)}
+        title="Edit product"
+      >
+        {editing && (
+          <ProductForm
+            key={editing._id || editing.id}
+            initialValues={editing}
+            onSubmit={handleUpdate}
+            submitting={submitting}
+            submitLabel="Save changes"
+          />
+        )}
       </Modal>
 
       <Modal

@@ -79,6 +79,71 @@ export const deleteProduct = async (req, res) => {
   }
 };
 
+export const updateProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await productModel.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({
+        message: 'Product not found.',
+      });
+    }
+
+    const parsedPrice =
+      typeof req.body.price === 'string'
+        ? JSON.parse(req.body.price)
+        : req.body.price;
+    const uploadedFiles =
+      req.files?.productFiles || req.files?.images || req.files?.files || [];
+    const existingImages = req.body.existingImages
+      ? JSON.parse(req.body.existingImages)
+      : product.images;
+
+    const update = {
+      title: req.body.title,
+      description: req.body.description,
+      stock: Number(req.body.stock),
+      category: req.body.category,
+      price: {
+        amount: Number(parsedPrice.amount),
+        currency: parsedPrice.currency,
+      },
+    };
+
+    if (uploadedFiles.length > 0) {
+      const uploadedImageUrls = await Promise.all(
+        uploadedFiles.map(async (file) => {
+          const response = await uploadFiles({
+            buffer: file.buffer,
+            fileName: file.originalname,
+          });
+          return response.url;
+        })
+      );
+      update.images = [...existingImages, ...uploadedImageUrls];
+    } else if (req.body.existingImages) {
+      update.images = existingImages;
+    }
+
+    const updatedProduct = await productModel.findByIdAndUpdate(
+      productId,
+      update,
+      { new: true, runValidators: true }
+    );
+
+    return res.status(200).json({
+      message: 'Product updated successfully.',
+      product: updatedProduct,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: 'Product update failed.',
+      error: error.message,
+    });
+  }
+};
+
 export const getAllProduct = async (req, res) => {
   try {
     const allproducts = await productModel.find();

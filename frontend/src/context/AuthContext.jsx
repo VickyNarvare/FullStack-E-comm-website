@@ -6,9 +6,15 @@ const AuthContext = createContext(null);
 
 const readAuthResponse = (response) => {
   const payload = response?.data || response;
+  const nestedPayload = payload?.data || {};
   return {
-    token: response?.accessToken || payload?.accessToken || response?.token,
-    profile: response?.seller || payload?.user || payload,
+    token:
+      response?.accessToken ||
+      payload?.accessToken ||
+      payload?.token ||
+      nestedPayload?.accessToken,
+    profile:
+      response?.seller || payload?.user || nestedPayload?.user || nestedPayload,
   };
 };
 
