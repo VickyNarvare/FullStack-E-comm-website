@@ -1,7 +1,13 @@
 import express from 'express';
 import { upload } from '../config/multer.config.js';
-import { createProduct } from '../controller/product.controller.js';
-import { productValidator } from '../validator/product.validator.js';
+import {
+  createProduct,
+  deleteProduct,
+} from '../controller/product.controller.js';
+import {
+  paramVelidator,
+  productValidator,
+} from '../validator/product.validator.js';
 const router = express.Router();
 
 const parsePrice = (req, res, next) => {
@@ -29,5 +35,6 @@ router.post(
   productValidator,
   createProduct
 );
+router.post('/delete/:id', paramVelidator, deleteProduct);
 
 export default router;

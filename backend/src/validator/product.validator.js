@@ -1,4 +1,4 @@
-import { body, validationResult } from 'express-validator';
+import { body, param, validationResult } from 'express-validator';
 export const productValidator = [
   body('title')
     .trim()
@@ -49,6 +49,26 @@ export const productValidator = [
     if (!errors.isEmpty()) {
       return res.status(400).json({
         message: 'Invalid request.',
+        errors: errors.array(),
+      });
+    }
+    next();
+  },
+];
+
+export const paramVelidator = [
+  param('id')
+    .exists()
+    .withMessage('id is required.')
+    .bail()
+    .isMongoId()
+    .withMessage('id must be a mongo id')
+    .bail(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        message: 'Invalid request',
         errors: errors.array(),
       });
     }
